@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Video Collection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff0000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ff0000, #ff5e00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            color: #ccc;
+            margin-bottom: 30px;
+        }
+        
+        .categories {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 25px;
+            color: #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .section-title i {
+            margin-right: 15px;
+        }
+        
+        .category-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .category-item {
+            background: linear-gradient(145deg, #222, #333);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid #ff0000;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .category-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 0, 0, 0.2);
+        }
+        
+        .category-item h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #ff0000;
+        }
+        
+        .category-item p {
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+        
+        .videos-count {
+            display: inline-block;
+            background: #ff0000;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        .pricing {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .price-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.5rem;
+        }
+        
+        .discount-price {
+            color: #ff0000;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        .discount-badge {
+            background: #ff0000;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .saving {
+            font-size: 1.2rem;
+            color: #4CAF50;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+        
+        .offer {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #ff5e00;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            border-top: 1px solid #333;
+            margin-top: 50px;
+            color: #999;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #1a1a1a, #222);
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(255, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .modal h2 {
+            color: #ff0000;
+            margin-bottom: 20px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff0000;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #333;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-group input::placeholder {
+            color: #999;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff0000, #ff5e00);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: inline-block;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+        
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 1rem;
+            width: auto;
+        }
+        
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .payment-option {
+            background: #333;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .payment-option:hover {
+            background: #444;
+        }
+        
+        .payment-option.selected {
+            background: #ff0000;
+        }
+        
+        .payment-option img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(145deg, #1a1a1a, #222);
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .success-message i {
+            font-size: 4rem;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .category-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .price-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-play-circle"></i>
+                Premium Video Collection
+            </div>
+        </header>
+
+        <section class="hero">
+            <h1>1,00,000+ Exclusive Videos</h1>
+            <p>Access premium content from top creators worldwide</p>
+        </section>
+
+        <section class="categories">
+            <h2 class="section-title"><i class="fas fa-fire"></i> Video Categories</h2>
+            <div class="category-list">
+                <div class="category-item">
+                    <h3>Action & Adventure</h3>
+                    <p>High-octane action sequences and thrilling adventures</p>
+                    <span class="videos-count">12,450 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Drama & Romance</h3>
+                    <p>Emotional stories and heartwarming relationships</p>
+                    <span class="videos-count">8,720 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Comedy</h3>
+                    <p>Hilarious content to keep you entertained</p>
+                    <span class="videos-count">9,340 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Documentaries</h3>
+                    <p>Educational and insightful real-world stories</p>
+                    <span class="videos-count">5,670 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Horror & Thriller</h3>
+                    <p>Spine-chilling content for thrill seekers</p>
+                    <span class="videos-count">7,890 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Sci-Fi & Fantasy</h3>
+                    <p>Immersive worlds beyond imagination</p>
+                    <span class="videos-count">6,540 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Kids & Family</h3>
+                    <p>Entertaining content for the whole family</p>
+                    <span class="videos-count">8,120 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Music & Concerts</h3>
+                    <p>Live performances and music videos</p>
+                    <span class="videos-count">4,980 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Sports</h3>
+                    <p>Thrilling moments from the world of sports</p>
+                    <span class="videos-count">5,760 Videos</span>
+                </div>
+                <div class="category-item">
+                    <h3>Educational</h3>
+                    <p>Learn new skills and expand your knowledge</p>
+                    <span class="videos-count">7,350 Videos</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="pricing">
+            <h2 class="section-title"><i class="fas fa-tag"></i> Special Offer</h2>
+            <div class="price-container">
+                <div class="original-price">Original Price: ₹2000</div>
+                <div class="discount-badge">75% OFF</div>
+            </div>
+            <div class="discount-price">Only ₹499</div>
+            <div class="saving">You Save: ₹1501</div>
+            <p class="offer">Limited Time Offer</p>
+            <button id="buyNowBtn" class="btn">Buy Now</button>
+        </section>
+
+        <footer>
+            <p>© 2023 Premium Video Collection. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <h2><i class="fas fa-lock"></i> Complete Your Purchase</h2>
+            
+            <div class="form-group">
+                <label for="paymentEmail">Email Address</label>
+                <input type="email" id="paymentEmail" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="paymentPhone">Phone Number</label>
+                <input type="tel" id="paymentPhone" placeholder="Enter your phone number" required>
+            </div>
+            
+            <h3>Select Payment Method</h3>
+            <div class="payment-options">
+                <div class="payment-option selected" data-method="upi">
+                    <i class="fas fa-mobile-alt" style="font-size: 24px;"></i>
+                    <div>
+                        <h4>UPI Payment</h4>
+                        <p>Pay using Google Pay, PhonePe, or any UPI app</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="upiDetails" class="payment-details" style="margin-top: 20px; padding: 15px; background: #333; border-radius: 10px;">
+                <h4>Send Payment to:</h4>
+                <p>UPI ID: <strong>singh.2547@superyes</strong></p>
+                <p>Amount: <strong>₹499</strong></p>
+                <p>After payment, your access will be activated within 24 hours</p>
+            </div>
+            
+            <button id="payNowBtn" class="btn" style="margin-top: 20px;">
+                <i class="fas fa-external-link-alt"></i> Pay Now via UPI
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+        <i class="fas fa-check-circle"></i>
+        <h2>Payment Successful!</h2>
+        <p>Thank you for your purchase. The download link for your videos has been sent to your WhatsApp and email address.</p>
+        <p>Please check your messages and email inbox.</p>
+        <button id="backToSite" class="btn btn-small" style="margin-top: 20px;">
+            <i class="fas fa-arrow-left"></i> Back to Website
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const buyNowBtn = document.getElementById('buyNowBtn');
+            const paymentModal = document.getElementById('paymentModal');
+            const modalClose = document.getElementById('modalClose');
+            const payNowBtn = document.getElementById('payNowBtn');
+            const successMessage = document.getElementById('successMessage');
+            const backToSite = document.getElementById('backToSite');
+            
+            // Open modal when Buy Now is clicked
+            buyNowBtn.addEventListener('click', function() {
+                paymentModal.style.display = 'flex';
+            });
+            
+            // Close modal when X is clicked
+            modalClose.addEventListener('click', function() {
+                paymentModal.style.display = 'none';
+            });
+            
+            // Close modal if clicked outside of modal content
+            window.addEventListener('click', function(event) {
+                if (event.target === paymentModal) {
+                    paymentModal.style.display = 'none';
+                }
+            });
+            
+            // Handle pay now button
+            payNowBtn.addEventListener('click', function() {
+                const email = document.getElementById('paymentEmail').value;
+                const phone = document.getElementById('paymentPhone').value;
+                
+                if (!email || !phone) {
+                    alert('Please enter your email and phone number');
+                    return;
+                }
+                
+                // Create UPI payment deep link
+                const upiId = 'singh.2547@superyes';
+                const amount = '499';
+                const name = 'Premium Video Collection';
+                const note = 'Premium Video Package';
+                
+                // Generate UPI payment URL
+                const upiURL = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+                
+                // Redirect to UPI apps
+                window.location.href = upiURL;
+                
+                // Show success message after a delay (simulating payment completion)
+                setTimeout(function() {
+                    paymentModal.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    
+                    // Here you would typically send the download link to the user's email and WhatsApp
+                    // This is a simulation since we don't have a backend
+                    console.log(`Sending download link to email: ${email} and phone: ${phone}`);
+                }, 3000);
+            });
+            
+            // Handle back to site button
+            backToSite.addEventListener('click', function() {
+                successMessage.style.display = 'none';
+            });
+            
+            // Animation for category items
+            const categoryItems = document.querySelectorAll('.category-item');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            categoryItems.forEach(item => {
+                item.style.opacity = 0;
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
